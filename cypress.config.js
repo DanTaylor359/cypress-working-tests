@@ -17,6 +17,8 @@ module.exports = defineConfig({
   retries: 0,
   responseTimeout: 60000,
   e2e: {
+    chromeWebSecurity: false,
+
     //experimentalSessionAndOrigin: true,
     setupNodeEvents(on, config) {
       on("task", {
