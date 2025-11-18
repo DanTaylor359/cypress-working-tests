@@ -4,3 +4,4 @@
 /results/
 /cypress/reports/
 /node_modules/.bin
+/package-lock.json
