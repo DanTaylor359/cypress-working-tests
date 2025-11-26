@@ -18,6 +18,8 @@ module.exports = defineConfig({
   responseTimeout: 60000,
   e2e: {
     chromeWebSecurity: false,
+    //specPattern: 'e2e/**/*.cy.{js,jsx,ts,tsx}',
+    supportFile: 'cypress/support/e2e.js',
 
     //experimentalSessionAndOrigin: true,
     setupNodeEvents(on, config) {

@@ -24,6 +24,57 @@ Cypress.Commands.add('signInWithoutOtpTotp', () => {
   });
 });
 
+// -- Might use, might delete TBC --
+//Cypress.Commands.add('mockWallet', (options = {}) => {
+//  const {
+//    account = '0xb167A759F503FCCe0E37708f987d6eA1446C7e94',  //default account - Linea ETH account 0.27usd
+//    //chainId = '0x1' // Ethereum Mainnet
+//  } = options;
+//
+//  cy.window().then(win => {
+//    win.ethereum = {
+//      isMetaMask: true,
+//      request: ({ method, params }) => {
+//        switch (method) {
+//          case 'eth_requestAccounts':
+//            return Promise.resolve([account]); // fake connected address
+//          case 'eth_accounts':
+//            return Promise.resolve([account]); // same as above if app checks existing accounts
+//          //case 'eth_chainId':
+//            //return Promise.resolve(chainId); // hex chain id string
+//          case 'wallet_switchEthereumChain':
+//            // optionally update the chain id to the requested one
+//            const requested = params?.[0]?.chainId;
+//            if (requested) {
+//              return Promise.resolve(); // simulate success
+//            }
+//            return Promise.reject(new Error('Missing chainId'));
+//          default:
+//            // Default no-op success for methods your app may call
+//            return Promise.resolve();
+//          }
+//      }
+//    };
+//  });
+//});
+
+Cypress.Commands.add('pickNetwork', (network) => {
+  // Check modal is present
+  cy.contains('Pick a network');
+
+  // Assert the chosen network option is visible and has correct text
+  cy.get('.delegationModal__networkSelector__option_label')
+    .contains(network)
+    .should('be.visible')
+    .and('have.text', network)
+    .click(); // actually select it
+
+  // Ensure the Continue button is visible
+  cy.contains('button', /^Continue$/)
+    .should('be.visible')
+    .click(); // proceed after selection
+});
+
 // Add a message to the report confirming the test has passed
 Cypress.Commands.add('confirmTestPassed', (message) => {
   cy.log(`✅ TEST PASSED: ${message}`);
