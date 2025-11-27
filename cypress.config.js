@@ -36,6 +36,12 @@ module.exports = defineConfig({
       on("task", {
         generateOTP: require("cypress-otp")
       });
+      on("task", {
+        log(message) {
+          console.log(message);
+          return null;
+        }
+      });
       on('task', {
         async verifyUser({ email, kyc_last_name }) {
           try {
