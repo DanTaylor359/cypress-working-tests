@@ -98,11 +98,19 @@ Cypress.Commands.add('assertExactTabSelected', (label) => {
   });
 });
 
+//// Add a fallback screenshot on test failure
+//Cypress.Commands.add('enableScreenshotOnTestFailure', () => {
+//  Cypress.on('fail', (error, runnable) => {
+//    cy.screenshot('overview-tab-failed');
+//    throw error; // rethrow to ensure test fails
+//  });
+//});
+
 // Add a fallback screenshot on test failure
 Cypress.Commands.add('enableScreenshotOnTestFailure', () => {
-  Cypress.on('fail', (error, runnable) => {
-    cy.screenshot('overview-tab-failed');
-    throw error; // rethrow to ensure test fails
+  cy.once('fail', (error, runnable) => {
+    cy.screenshot('overview-tab-failed');   // ✅ queued properly
+    throw error; // rethrow so the test still fails
   });
 });
 
