@@ -12,15 +12,28 @@
 // -- This is a parent command --
 // Cypress.Commands.add('login', (email, password) => { ... })
 
-// Sign in without OTP or TOPT
-Cypress.Commands.add('signInWithoutOtpTotp', () => {
-  cy.fixture('all-users.json').then(users => {
-    const user = users[0];
+// Sign in without OTP or TOPT   
+//Cypress.Commands.add('signInWithoutOtpTotp', () => {                 //original command - will delete
+//  cy.fixture('all-users.json').then(users => {
+//    const user = users[0];
+//    cy.visit(`https://${user.envUrl}/account/login`);
+//    cy.get('input[id="email"]').type(user.email);
+//    cy.get('input[id="password"]').type(user.password);
+//    cy.contains('button', 'Log in').click();
+//    cy.contains('Overview', { timeout: 4000 }).should('be.visible');  
+//  });
+//});
+Cypress.Commands.add('signInWithoutOtpTotp', (userIndex = 0) => {
+  return cy.fixture('all-users.json').then(users => {
+    const user = users[userIndex];
     cy.visit(`https://${user.envUrl}/account/login`);
-    cy.get('input[id="email"]').type(user.email);
-    cy.get('input[id="password"]').type(user.password);
+    cy.get('#email').type(user.email);
+    cy.get('#password').type(user.password);
     cy.contains('button', 'Log in').click();
-    cy.contains('Overview', { timeout: 4000 }).should('be.visible');  
+    cy.contains('Overview', { timeout: 4000 }).should('be.visible');
+    
+    // Wrap the user so Cypress can yield it
+    cy.wrap(user).as('currentUser');
   });
 });
 
@@ -77,8 +90,8 @@ Cypress.Commands.add('pickNetwork', (network) => {
 
 // Add a message to the report confirming the test has passed
 Cypress.Commands.add('confirmTestPassed', (message) => {
-  cy.log(`✅ TEST PASSED: ${message}`);
-  expect(true, `✅ TEST PASSED: ${message}`).to.be.true;
+  cy.log(`TEST PASSED: ${message}`);
+  expect(true, `TEST PASSED: ${message}`).to.be.true;
 });
 
 // Assert that a tab with the exact label is selected
@@ -93,13 +106,13 @@ Cypress.Commands.add('assertExactTabSelected', (label) => {
       .should('be.visible')
       .and('have.attr', 'aria-selected', 'true')
       .then(() => {
-        cy.log(`✅ TEST PASSED: Tab "${label}" is visible and selected`);
+        cy.log(`TEST PASSED: Tab "${label}" is visible and selected`);
       });
   });
 });
 
 //// Add a fallback screenshot on test failure
-//Cypress.Commands.add('enableScreenshotOnTestFailure', () => {
+//Cypress.Commands.add('enableScreenshotOnTestFailure', () => {                    //original command - will delete
 //  Cypress.on('fail', (error, runnable) => {
 //    cy.screenshot('overview-tab-failed');
 //    throw error; // rethrow to ensure test fails
@@ -109,7 +122,7 @@ Cypress.Commands.add('assertExactTabSelected', (label) => {
 // Add a fallback screenshot on test failure
 Cypress.Commands.add('enableScreenshotOnTestFailure', () => {
   cy.once('fail', (error, runnable) => {
-    cy.screenshot('overview-tab-failed');   // ✅ queued properly
+    cy.screenshot('overview-tab-failed');
     throw error; // rethrow so the test still fails
   });
 });
